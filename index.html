@@ -1,824 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Uillian Novaes — Tatuagem Autoral</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --ink: #0e0d0c;
-    --ink-muted: #3a3530;
-    --ink-faint: #6b6560;
-    --parchment: #f5f0e8;
-    --parchment-dark: #ede6d8;
-    --gold: #b8914a;
-    --gold-light: #d4aa6a;
-    --rust: #7a3e28;
-    --cream: #faf7f2;
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-mono: 'DM Mono', monospace;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: var(--font-display);
-    background: var(--ink);
-    color: var(--parchment);
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* Custom cursor */
-  .cursor {
-    width: 10px; height: 10px;
-    background: var(--gold);
-    border-radius: 50%;
-    position: fixed;
-    top: 0; left: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1px solid var(--gold);
-    border-radius: 50%;
-    position: fixed;
-    top: 0; left: 0;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    opacity: 0.5;
-    transition: left 0.08s ease-out, top 0.08s ease-out;
-  }
-  body:hover .cursor { opacity: 1; }
-
-  /* Nav */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 4rem;
-    background: linear-gradient(to bottom, rgba(14,13,12,0.95) 0%, rgba(14,13,12,0) 100%);
-  }
-  .nav-logo {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 300;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--parchment);
-    text-decoration: none;
-  }
-  .nav-links {
-    display: flex;
-    gap: 3rem;
-    list-style: none;
-  }
-  .nav-links a {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--parchment);
-    text-decoration: none;
-    opacity: 0.7;
-    transition: opacity 0.3s;
-  }
-  .nav-links a:hover { opacity: 1; color: var(--gold-light); }
-
-  /* Hero */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 8rem 4rem 6rem;
-    position: relative;
-    z-index: 2;
-  }
-  .hero-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-  }
-  .hero-title {
-    font-size: clamp(3.5rem, 7vw, 6rem);
-    font-weight: 300;
-    line-height: 1.0;
-    font-style: italic;
-    color: var(--parchment);
-    margin-bottom: 0.3rem;
-  }
-  .hero-title strong {
-    font-weight: 600;
-    font-style: normal;
-    display: block;
-  }
-  .hero-sub {
-    font-size: 1.1rem;
-    font-weight: 300;
-    color: var(--ink-faint);
-    color: #a09890;
-    margin: 2rem 0 3rem;
-    line-height: 1.8;
-    max-width: 380px;
-    font-style: italic;
-  }
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-    text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink);
-    background: var(--gold);
-    padding: 1rem 2.5rem;
-    transition: background 0.3s, transform 0.3s;
-    width: fit-content;
-  }
-  .hero-cta:hover { background: var(--gold-light); transform: translateY(-2px); }
-  .hero-cta svg { width: 16px; height: 16px; }
-
-  .hero-right {
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-image-placeholder {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(135deg, #1a1410 0%, #2a1f14 30%, #1a1208 60%, #0e0d0c 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .hero-image-placeholder::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      radial-gradient(circle at 60% 40%, rgba(184,145,74,0.12) 0%, transparent 50%);
-  }
-  .hero-image-placeholder img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.85;
-  }
-  .hero-image-placeholder .placeholder-text {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    color: #3a3025;
-    text-transform: uppercase;
-    text-align: center;
-    z-index: 1;
-  }
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, var(--ink) 0%, transparent 30%);
-    z-index: 1;
-  }
-
-  /* Noise grain overlay */
-  .grain {
-    position: fixed;
-    inset: -50%;
-    width: 200%;
-    height: 200%;
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* Decorative line */
-  .deco-line {
-    width: 1px;
-    height: 80px;
-    background: var(--gold);
-    opacity: 0.4;
-    margin: 2rem auto;
-  }
-
-  /* About section */
-  .about {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 6rem;
-    padding: 8rem 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .about-label {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    padding-top: 0.4rem;
-  }
-  .about-text {
-    font-size: 1.3rem;
-    line-height: 1.9;
-    font-weight: 300;
-    color: #c0b8ae;
-  }
-  .about-text em {
-    color: var(--parchment);
-    font-style: italic;
-  }
-  .about-text p + p { margin-top: 1.5rem; }
-
-  /* Divider */
-  .section-divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
-    opacity: 0.2;
-    margin: 0 4rem;
-    width: calc(100% - 8rem);
-  }
-
-  /* Gallery */
-  .gallery-section {
-    padding: 8rem 4rem;
-  }
-  .gallery-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 4rem;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .section-title {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.1;
-    color: var(--parchment);
-  }
-  .section-title strong { font-weight: 600; font-style: normal; }
-  .gallery-note {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--ink-faint);
-    color: #6b6560;
-    text-transform: uppercase;
-    max-width: 200px;
-    text-align: right;
-  }
-
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto auto;
-    gap: 1.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .gallery-item {
-    position: relative;
-    overflow: hidden;
-    background: #1a1510;
-    aspect-ratio: 3/4;
-    cursor: none;
-  }
-  .gallery-item:first-child {
-    grid-row: span 2;
-    aspect-ratio: auto;
-  }
-  .gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-    opacity: 0.85;
-  }
-  .gallery-item:hover img { transform: scale(1.04); }
-  .gallery-item-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(14,13,12,0.8) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.4s;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.5rem;
-  }
-  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
-  .gallery-item-tag {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-  }
-  .gallery-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.25em;
-    color: #2a251f;
-    text-transform: uppercase;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .gallery-placeholder svg {
-    width: 24px; height: 24px;
-    opacity: 0.3;
-  }
-  .gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-    opacity: 0.9;
-    display: block;
-  }
-
-  /* Process / Narrative */
-  .narrative {
-    padding: 8rem 4rem;
-    background: #0a0908;
-  }
-  .narrative-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .narrative-header {
-    margin-bottom: 5rem;
-  }
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4rem;
-    position: relative;
-  }
-  .steps::before {
-    content: '';
-    position: absolute;
-    top: 1.5rem;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold), var(--gold), transparent);
-    opacity: 0.2;
-  }
-  .step-number {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    color: var(--gold);
-    margin-bottom: 2rem;
-  }
-  .step-title {
-    font-size: 1.6rem;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--parchment);
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-  .step-desc {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: #7a7268;
-    font-family: var(--font-mono);
-    font-weight: 300;
-  }
-
-  /* Testimonial / Quote */
-  .quote-section {
-    padding: 8rem 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .quote-block {
-    max-width: 800px;
-    text-align: center;
-  }
-  .quote-mark {
-    font-size: 6rem;
-    line-height: 0.5;
-    color: var(--gold);
-    opacity: 0.3;
-    font-style: italic;
-    display: block;
-    margin-bottom: 2rem;
-  }
-  blockquote {
-    font-size: clamp(1.4rem, 2.5vw, 2rem);
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.7;
-    color: var(--parchment);
-    margin-bottom: 2rem;
-  }
-  .quote-attr {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-
-  /* Contact / Booking */
-  .booking {
-    padding: 8rem 4rem;
-    background: #0a0908;
-  }
-  .booking-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8rem;
-    align-items: center;
-  }
-  .booking-text .section-title { margin-bottom: 1.5rem; }
-  .booking-desc {
-    font-size: 1rem;
-    line-height: 1.9;
-    color: #7a7268;
-    font-family: var(--font-mono);
-    font-weight: 300;
-    margin-bottom: 3rem;
-  }
-  .whatsapp-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink);
-    background: var(--gold);
-    padding: 1.1rem 2.5rem;
-    transition: background 0.3s, transform 0.3s;
-    width: fit-content;
-  }
-  .whatsapp-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
-  .whatsapp-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-  .booking-details {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-  .detail-item {
-    padding: 1.5rem;
-    border: 1px solid #1e1c18;
-    border-left: 2px solid var(--gold);
-  }
-  .detail-label {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-  }
-  .detail-value {
-    font-size: 1.1rem;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--parchment);
-  }
-
-  /* Footer */
-  footer {
-    padding: 3rem 4rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid #1a1815;
-  }
-  .footer-name {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    font-weight: 300;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    color: #3a3530;
-  }
-  .footer-tagline {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #2a2520;
-  }
-
-  /* Animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .fade-up {
-    opacity: 0;
-    animation: fadeUp 0.9s ease forwards;
-  }
-  .fade-up:nth-child(1) { animation-delay: 0.1s; }
-  .fade-up:nth-child(2) { animation-delay: 0.25s; }
-  .fade-up:nth-child(3) { animation-delay: 0.4s; }
-  .fade-up:nth-child(4) { animation-delay: 0.55s; }
-
-  /* Scroll reveal */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    nav { padding: 1.2rem 2rem; }
-    .nav-links { gap: 1.5rem; }
-    .hero { grid-template-columns: 1fr; }
-    .hero-right { height: 50vh; }
-    .hero-left { padding: 7rem 2rem 4rem; }
-    .about { grid-template-columns: 1fr; gap: 2rem; padding: 5rem 2rem; }
-    .gallery-section { padding: 5rem 2rem; }
-    .gallery-grid { grid-template-columns: 1fr 1fr; }
-    .gallery-item:first-child { grid-row: span 1; }
-    .steps { grid-template-columns: 1fr; }
-    .steps::before { display: none; }
-    .booking-inner { grid-template-columns: 1fr; gap: 4rem; }
-    .narrative { padding: 5rem 2rem; }
-    .booking { padding: 5rem 2rem; }
-    .quote-section { padding: 5rem 2rem; }
-    footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uillian Novaes | Tatuagem Autoral em Salvador-BA</title>
+  <meta name="description" content="Tatuagens autorais com linguagem visual única, criadas a partir da história de cada cliente. Agende uma conversa com Uillian Novaes em Salvador-BA." />
+  <meta name="keywords" content="Uillian Novaes, tatuagem autoral, tatuador em Salvador, tatuagem personalizada, tattoo autoral, tatuagem artística" />
+  <meta name="author" content="Uillian Novaes" />
+  <meta property="og:title" content="Uillian Novaes | Tatuagem Autoral" />
+  <meta property="og:description" content="Arte que nasce da sua história. Tatuagens autorais, narrativas e personalizadas." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/img9.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-<div class="grain"></div>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursor-ring"></div>
-
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Uillian Novaes</a>
-  <ul class="nav-links">
-    <li><a href="#sobre">Sobre</a></li>
-    <li><a href="#trabalhos">Trabalhos</a></li>
-    <li><a href="#processo">Processo</a></li>
-    <li><a href="#contato">Agendamento</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-eyebrow fade-up">Tatuagem autoral — Salvador-BA, Brasil</p>
-    <h1 class="hero-title fade-up">
-      Arte que <br><strong>conta a sua</strong><br> história
-    </h1>
-    <p class="hero-sub fade-up">
-      Cada tatuagem nasce de uma narrativa única. Um filtro pessoal sobre o mundo, traduzido em pele.
-    </p>
-    <a href="https://wa.me/5571991160676?text=Olá%20Uillian!%20Gostaria%20de%20agendar%20uma%20tatuagem." class="hero-cta fade-up" target="_blank" rel="noopener">
-      Agendar via WhatsApp
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M5 12h14M12 5l7 7-7 7"/>
-      </svg>
-    </a>
+  <div class="grain"></div>
+  <header class="nav">
+   <a href="#topo" class="brand" aria-label="Uillian Novaes">
+  <img src="assets/logo-uillian.webp" alt="Logo Uillian Novaes" class="brand-logo">
+  <div>
+    <span>Uillian Novaes</span>
+    <small>Tatuagem autoral</small>
   </div>
-  <div class="hero-right">
-    <div class="hero-image-placeholder">
-      <img src="img9.jpg" alt="Tatuagem autoral por Uillian Novaes" style="width:100%;height:100%;object-fit:cover;opacity:0.85;">
-    </div>
-    <div class="hero-overlay"></div>
-  </div>
-</section>
+</a>
+    <nav class="nav-links" aria-label="Menu principal">
+      <a href="#sobre">Sobre</a>
+      <a href="#portfolio">Portfólio</a>
+      <a href="#processo">Processo</a>
+      <a href="#contato">Agendar</a>
+    </nav>
+  </header>
 
-<!-- ABOUT -->
-<section class="about" id="sobre">
-  <div class="about-label reveal">sobre o trabalho</div>
-  <div class="about-text reveal">
-    <p>
-      Meu trabalho não começa com um traço — começa com uma <em>conversa</em>. Com o que você carrega, o que admira, o que quer lembrar pra sempre.
-    </p>
-    <p>
-      Desenvolvi uma linguagem visual própria: uma estética que representa o mundo sob o filtro da minha visão. <em>Não é decoração. É narrativa.</em> Cada peça tem intenção, personalidade, e um ponto de partida que só você conhece.
-    </p>
-    <p>
-      O resultado é uma tatuagem autoral — que não poderia ter sido feita para mais ninguém.
-    </p>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- GALLERY -->
-<section class="gallery-section" id="trabalhos">
-  <div class="gallery-header reveal">
-    <h2 class="section-title">
-      Um recorte<br><strong>do portfólio</strong>
-    </h2>
-    <p class="gallery-note">Cada peça nasce de uma história particular</p>
-  </div>
-
-  <div class="gallery-grid">
-    <!-- Item grande -->
-    <div class="gallery-item reveal">
-      <img src="img2.jpg" alt="Tatuagem autoral — figura com asas" style="width:100%;height:100%;object-fit:cover;object-position:center top;">
-      <div class="gallery-item-overlay">
-        <span class="gallery-item-tag">peça autoral</span>
+  <main id="topo">
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Tatuagem autoral • Salvador-BA</p>
+        <h1>Arte que nasce da sua história.</h1>
+        <p class="lead">Projetos personalizados, narrativos e criados do zero para transformar memória, cultura e identidade em tatuagem.</p>
+        <div class="hero-actions">
+          <a class="btn primary" target="_blank" rel="noopener" href="https://wa.me/5571991160676?text=Ol%C3%A1%20Uillian!%20Gostaria%20de%20conversar%20sobre%20uma%20tatuagem%20autoral.">Agendar pelo WhatsApp</a>
+          <a class="btn ghost" href="#portfolio">Ver trabalhos</a>
+        </div>
       </div>
-    </div>
-
-    <!-- Items menores -->
-    <div class="gallery-item reveal">
-      <img src="img8.jpg" alt="Tatuagem autoral — figura segurando flor" style="width:100%;height:100%;object-fit:cover;">
-      <div class="gallery-item-overlay">
-        <span class="gallery-item-tag">narrativa visual</span>
+      <div class="hero-media reveal delay">
+        <img src="assets/img9.webp" alt="Tatuagem autoral de cogumelos feita por Uillian Novaes" width="900" height="1200" />
+        <div class="media-caption">linguagem pessoal • narrativa visual</div>
       </div>
-    </div>
+    </section>
 
-    <div class="gallery-item reveal">
-      <img src="img3.jpg" alt="Tatuagem colorida — pássaro azul com caju" style="width:100%;height:100%;object-fit:cover;">
-      <div class="gallery-item-overlay">
-        <span class="gallery-item-tag">traço autoral</span>
+    <section class="about section" id="sobre">
+      <div class="section-kicker reveal">sobre o trabalho</div>
+      <div class="about-text reveal">
+        <h2>Tatuagem não como enfeite. Como narrativa.</h2>
+        <p>O trabalho de Uillian Novaes parte de uma conversa: o que a pessoa carrega, o que quer lembrar e qual história deseja transformar em imagem.</p>
+        <p>A estética mistura referências culturais, natureza, música, cinema, arte popular e símbolos pessoais em uma linguagem autoral, sutil e convidativa.</p>
       </div>
-    </div>
+    </section>
 
-    <div class="gallery-item reveal">
-      <img src="img1.jpg" alt="Tatuagem — passarinho no arame farpado" style="width:100%;height:100%;object-fit:cover;">
-      <div class="gallery-item-overlay">
-        <span class="gallery-item-tag">história em pele</span>
+    <section class="portfolio section" id="portfolio">
+      <div class="section-head reveal">
+        <p class="section-kicker">portfólio selecionado</p>
+        <h2>Traços que parecem ilustração, mas carregam memória.</h2>
       </div>
-    </div>
-
-    <div class="gallery-item reveal">
-      <img src="img10.jpg" alt="Tatuagem — cobra enrolada no pulso" style="width:100%;height:100%;object-fit:cover;">
-      <div class="gallery-item-overlay">
-        <span class="gallery-item-tag">linguagem pessoal</span>
+      <div class="gallery">
+        <figure class="gallery-item tall reveal"><img src="assets/img2.webp" alt="Tatuagem autoral em braço com figura humana e asas" loading="lazy" width="900" height="1200"><figcaption>figura autoral</figcaption></figure>
+        <figure class="gallery-item reveal"><img src="assets/img3.webp" alt="Tatuagem colorida de pássaro azul com cajus" loading="lazy" width="900" height="1200"><figcaption>cor e natureza</figcaption></figure>
+        <figure class="gallery-item reveal"><img src="assets/img1.webp" alt="Tatuagem de passarinho no arame farpado em blackwork" loading="lazy" width="900" height="1200"><figcaption>blackwork narrativo</figcaption></figure>
+        <figure class="gallery-item reveal"><img src="assets/img8.webp" alt="Tatuagem autoral de figura segurando uma flor" loading="lazy" width="900" height="1200"><figcaption>poesia visual</figcaption></figure>
+        <figure class="gallery-item reveal"><img src="assets/img10.webp" alt="Tatuagem de cobra no braço com composição minimalista" loading="lazy" width="900" height="1200"><figcaption>símbolos pessoais</figcaption></figure>
+        <figure class="gallery-item reveal"><img src="assets/img4.webp" alt="Tatuagem de figura com coroa no peito em estilo autoral" loading="lazy" width="900" height="1200"><figcaption>peça exclusiva</figcaption></figure>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<div class="section-divider"></div>
-
-<!-- PROCESS -->
-<section class="narrative" id="processo">
-  <div class="narrative-inner">
-    <div class="narrative-header reveal">
-      <h2 class="section-title">
-        Como<br><strong>acontece</strong>
-      </h2>
-    </div>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step-number">01 — Conversa</div>
-        <h3 class="step-title">A sua história vem primeiro</h3>
-        <p class="step-desc">Antes de qualquer esboço, quero entender o que você quer eternizar. Referências, memórias, ideias — tudo alimenta o processo criativo.</p>
+    <section class="process section dark" id="processo">
+      <div class="section-head reveal">
+        <p class="section-kicker">como funciona</p>
+        <h2>Um processo criativo com escuta, desenho e intenção.</h2>
       </div>
-      <div class="step reveal">
-        <div class="step-number">02 — Criação</div>
-        <h3 class="step-title">Um desenho feito só para você</h3>
-        <p class="step-desc">Desenvolvo o projeto com base na nossa conversa e na minha linguagem visual. O resultado é único — não existe uma segunda cópia.</p>
+      <div class="steps">
+        <article class="step reveal"><span>01</span><h3>Conversa</h3><p>O projeto começa entendendo sua ideia, referências e o motivo por trás da tatuagem.</p></article>
+        <article class="step reveal"><span>02</span><h3>Criação</h3><p>O desenho é desenvolvido com base na sua história e na linguagem visual do artista.</p></article>
+        <article class="step reveal"><span>03</span><h3>Execução</h3><p>A tatuagem ganha forma com atenção ao detalhe, composição e acabamento.</p></article>
       </div>
-      <div class="step reveal">
-        <div class="step-number">03 — Execução</div>
-        <h3 class="step-title">Narrativa gravada em pele</h3>
-        <p class="step-desc">Com atenção e cuidado, transformamos o traço em tatuagem. Uma peça que você vai querer mostrar pelo resto da vida.</p>
+    </section>
+
+    <section class="quote section">
+      <blockquote class="reveal">“Uma boa tatuagem não precisa explicar tudo. Ela precisa fazer sentido para quem carrega.”</blockquote>
+    </section>
+
+    <section class="booking section" id="contato">
+      <div class="booking-card reveal">
+        <p class="section-kicker">agendamento</p>
+        <h2>Vamos transformar sua ideia em uma peça autoral?</h2>
+        <p>Chame no WhatsApp para conversar sobre o projeto, tirar dúvidas e verificar disponibilidade na agenda.</p>
+        <a class="btn primary big" target="_blank" rel="noopener" href="https://wa.me/5571991160676?text=Ol%C3%A1%20Uillian!%20Gostaria%20de%20conversar%20sobre%20uma%20tatuagem%20autoral.">Chamar no WhatsApp</a>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- QUOTE -->
-<section class="quote-section">
-  <div class="quote-block reveal">
-    <span class="quote-mark">"</span>
-    <blockquote>
-      Uma tatuagem não é enfeite. É um fragmento de quem você é, colocado no único lugar onde ninguém pode tirar de você.
-    </blockquote>
-    <p class="quote-attr">— Uillian Novaes</p>
-  </div>
-</section>
-
-<!-- BOOKING -->
-<section class="booking" id="contato">
-  <div class="booking-inner">
-    <div class="booking-text reveal">
-      <h2 class="section-title">
-        Vamos criar<br><strong>juntos?</strong>
-      </h2>
-      <p class="booking-desc">
-        Entre em contato pelo WhatsApp para conversarmos sobre sua ideia, tirar dúvidas e verificar disponibilidade na agenda.
-      </p>
-      <!-- SUBSTITUA o número: 5511999999999 pelo número real do Uillian -->
-      <a href="https://wa.me/5571991160676?text=Olá%20Uillian!%20Gostaria%20de%20conversar%20sobre%20uma%20tatuagem%20autoral." class="whatsapp-btn" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
-        Agendar pelo WhatsApp
-      </a>
-    </div>
-    <div class="booking-details reveal">
-      <div class="detail-item">
-        <div class="detail-label">Estilo</div>
-        <div class="detail-value">Tatuagem autoral com linguagem visual única</div>
+      <div class="details reveal delay">
+        <div><strong>Estilo</strong><span>Tatuagem autoral e personalizada</span></div>
+        <div><strong>Projetos</strong><span>Desenhos criados do zero</span></div>
+        <div><strong>Atendimento</strong><span>Conversa prévia antes do desenho</span></div>
+        <div><strong>Local</strong><span>Salvador-BA</span></div>
       </div>
-      <div class="detail-item">
-        <div class="detail-label">Projetos</div>
-        <div class="detail-value">Personalizados — cada peça criada do zero</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Agendamento</div>
-        <div class="detail-value">Conversa prévia obrigatória — sua história importa</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Contato</div>
-        <div class="detail-value">Via WhatsApp ou redes sociais</div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
+  </main>
 
-<!-- FOOTER -->
-<footer>
-  <span class="footer-name">Uillian Novaes</span>
-  <span class="footer-tagline">Tatuagem autoral — Arte que conta histórias</span>
-</footer>
-
-<script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const cursorRing = document.getElementById('cursor-ring');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    cursorRing.style.left = e.clientX + 'px';
-    cursorRing.style.top = e.clientY + 'px';
-  });
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '20px';
-      cursor.style.height = '20px';
-      cursor.style.background = 'var(--gold-light)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '10px';
-      cursor.style.height = '10px';
-      cursor.style.background = 'var(--gold)';
-    });
-  });
-
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.15 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
+  <footer>
+    <span>© Uillian Novaes</span>
+    <span>Tatuagem autoral — arte que conta histórias</span>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>
